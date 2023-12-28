@@ -65,3 +65,16 @@ func (r *PgTodoRepo) Delete(
 	_, err := r.db.Model(&Todo{Id: id}).WherePK().Delete()
 	return err
 }
+
+func (r *PgTodoRepo) Read(
+	id int,
+) (*models.Todo, error) {
+	todo := &Todo{Id: id}
+	err := r.db.Select(todo)
+	return &models.Todo{
+		Id:          todo.Id,
+		Title:       todo.Title,
+		Description: todo.Descr,
+		Completed:   todo.Done,
+	}, err
+}

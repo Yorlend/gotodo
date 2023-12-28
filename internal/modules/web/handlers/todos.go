@@ -32,7 +32,6 @@ func (h *TodosHandler) Get(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	// todos to json
 	todosJson, err := json.Marshal(todos)
 	if err != nil {
 		h.logger.Error(err)
@@ -66,12 +65,8 @@ func (h *TodosHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	err = h.repo.Delete(id)
-	if err != nil {
-		h.logger.Error(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	_ = h.repo.Delete(id)
+
 	w.WriteHeader(http.StatusNoContent)
 }
 
@@ -93,8 +88,30 @@ func (h *TodosHandler) Patch(w http.ResponseWriter, r *http.Request) {
 	err = h.repo.Update(todo)
 	if err != nil {
 		h.logger.Error(err)
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func (h *TodosHandler) GetOne(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(mux.Vars(r)["id"])
+	if err != nil {
+		h.logger.Error(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	todo, err := h.repo.Read(id)
+	if err != nil {
+		h.logger.Error(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	todoJson, err := json.Marshal(todo)
+	if err != nil {
+		h.logger.Error(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.Write(todoJson)
 }

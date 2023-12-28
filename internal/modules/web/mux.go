@@ -13,10 +13,11 @@ func NewRouter(
 
 	r.Handle("/", hh).Methods("GET")
 
-	r.HandleFunc("/todos", th.Get).Methods("GET")
-	r.HandleFunc("/todos/{id}", th.Delete).Methods("DELETE")
-	r.HandleFunc("/todos", th.Post).Methods("POST")
-	r.HandleFunc("/todos/{id}", th.Patch).Methods("PATCH")
+	r.HandleFunc("/api/todos", th.Get).Methods("GET")
+	r.HandleFunc("/api/todos/{id}", th.Delete).Methods("DELETE")
+	r.HandleFunc("/api/todos", th.Post).Methods("POST")
+	r.HandleFunc("/api/todos/{id}", th.Patch).Methods("PATCH")
+	r.HandleFunc("/api/todos/{id}", th.GetOne).Methods("GET")
 
 	return r
 }

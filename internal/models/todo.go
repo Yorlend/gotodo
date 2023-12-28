@@ -5,6 +5,7 @@ type TodoRepository interface {
 	ReadAll() (Todos, error)
 	Update(todo *Todo) error
 	Delete(id int) error
+	Read(id int) (*Todo, error)
 }
 
 type Todo struct {
